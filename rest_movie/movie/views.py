@@ -38,7 +38,7 @@ class GenreListView(APIView):
 class ReviewListView(APIView):
 
     def post(self,request):
-        review = ReviewCreateSerializer(data=request.data)
+        review = ReviewCreateSerializer(data=request.data, many=True)
         if review.is_valid():
             review.save()
         return Response(status=201)
@@ -52,6 +52,35 @@ class ReviewDetail(APIView):
         review = Review.objects.get(id = pk)
         serializer = ReviewDetailSerializer(review,)
         return Response(serializer.data)
+
+    def put(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method PUT now allowed"})
+
+        try:
+            instance = Review.objects.get(pk=pk)
+        except:
+            return Response({"error": "object does not exist"})
+
+        serializer = ReviewDetailSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+    def delete(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method DELETE not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            instance = Review.objects.get(pk=pk)
+        except Review.DoesNotExist:
+            return Response({"error": "Object does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        instance.delete()
+        return Response({"message": "Object deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
 
 
 class ActorListView(APIView):
