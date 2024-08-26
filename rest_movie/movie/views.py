@@ -5,12 +5,21 @@ from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 
+from .service import get_client_ip
+
 # Create your views here.
 
 
 class MovieListView(APIView):
+
+
     def get(self,request):
-        movies = Movie.objects.filter(draft=False)
+
+        movies = Movie.objects.filter(draft=False).annotate(
+                rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(request)))
+            ).annotate(
+            middle_star = models.Sum(models.F('ratings__star'))/ models.Count(models.F('ratings'))
+        )
         serializer = MovieListSerializers(movies,many=True)
         return Response(serializer.data)
 
@@ -91,7 +100,7 @@ class ActorListView(APIView):
         return Response(serializer.data)
 
     def post(self,request):
-        actor = ActorSerializer(data=request.data)
+        actor = ActorSerializer(data=request.data,many=True)
         if actor.is_valid():
             actor.save()
         return Response(status=201)
@@ -135,7 +144,7 @@ class ActorDetailView(APIView):
 class CategoryListView(APIView):
     def get(self,request):
         category = Category.objects.all()
-        serializer = CategorySerializer(category, many = True)
+        serializer = CategorySerializer(category, many=True)
         return Response(serializer.data)
 
     def post(self,request):
@@ -180,3 +189,21 @@ class CategoryDetailView(APIView):
         return Response({"message": "Object deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
+
+class RatingView(APIView):
+    serializer_class = RatingSerializer
+
+    def get_queryset(self):
+        queryset = Rating.objects.all()
+        for rating in queryset:
+            rating.ip = self.request.META.get('REMOTE_ADDR')
+        return queryset
+
+class AddStarRatingView(APIView):
+    def post(self,request):
+        serializer = CreateRatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(ip=get_client_ip(request))
+            return Response(status=200)
+        else:
+            return Response(status=400)

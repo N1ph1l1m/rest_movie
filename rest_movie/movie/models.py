@@ -23,7 +23,7 @@ class Actor(models.Model):
     name = models.CharField("Имя", max_length=100)
     age = models.PositiveSmallIntegerField("Возраст", default=0)
     description = models.TextField("Описание")
-    image = models.ImageField("Изображение", upload_to="actors/")
+    image = models.ImageField("Изображение", upload_to="actors/" , default="actors/avatar.jpg")
 
     def __str__(self):
         return self.name
@@ -55,7 +55,7 @@ class Movie(models.Model):
     title = models.CharField("Название", max_length=100)
     tagline = models.CharField("Слоган", max_length=100, default='')
     description = models.TextField("Описание")
-    poster = models.ImageField("Постер", upload_to="movies/")
+    poster = models.ImageField("Постер", upload_to="movies/", default="movies/default.jpg")
     year = models.PositiveSmallIntegerField("Дата выхода", default=2019)
     country = models.CharField("Страна", max_length=30)
     directors = models.ManyToManyField(Actor, verbose_name="режиссер", related_name="film_director")
@@ -94,7 +94,7 @@ class MovieShots(models.Model):
     """Кадры из фильма"""
     title = models.CharField("Заголовок", max_length=100)
     description = models.TextField("Описание")
-    image = models.ImageField("Изображение", upload_to="movie_shots/")
+    image = models.ImageField("Изображение", upload_to="movie_shots/" , default="movie_shots/short-cat.png")
     movie = models.ForeignKey(Movie, verbose_name="Фильм", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -122,7 +122,7 @@ class Rating(models.Model):
     """Рейтинг"""
     ip = models.CharField("IP адрес", max_length=15)
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="звезда")
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name="фильм")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name="фильм",related_name="ratings")
 
     def __str__(self):
         return f"{self.star} - {self.movie}"
@@ -137,9 +137,7 @@ class Review(models.Model):
     email = models.EmailField()
     name = models.CharField("Имя", max_length=100)
     text = models.TextField("Сообщение", max_length=5000)
-    parent = models.ForeignKey(
-        'self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True
-    )
+    parent = models.ForeignKey('self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True, related_name="children")
     movie = models.ForeignKey(Movie, verbose_name="фильм", on_delete=models.CASCADE,related_name="reviews")
 
     def __str__(self):
