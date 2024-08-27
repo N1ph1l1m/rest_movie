@@ -10,6 +10,8 @@ urlpatterns = [
     path("review/",views.ReviewListView.as_view()),
     path("review/<int:pk>/",views.ReviewDetail.as_view()),
     path("actor/",views.ActorListView.as_view()),
+    path("actor-gen/",views.ActorList.as_view()),
+    path("actor-gen/<int:pk>/",views.ActorDerail.as_view()),
     path("actor/<int:pk>/",views.ActorDetailView.as_view()),
     path("category/", views.CategoryListView.as_view()),
     path("category/<int:pk>/", views.CategoryDetailView.as_view()),

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import  Response
 from rest_framework.views import APIView
 from .models import *
@@ -104,6 +104,15 @@ class ActorListView(APIView):
         if actor.is_valid():
             actor.save()
         return Response(status=201)
+
+class ActorList(generics.ListAPIView):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerializer
+
+
+class ActorDerail(generics.RetrieveAPIView):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerializer
 
 
 class ActorDetailView(APIView):

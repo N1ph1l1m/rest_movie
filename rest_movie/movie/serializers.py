@@ -41,18 +41,6 @@ class MovieListSerializers(serializers.ModelSerializer):
         fields = ('title', 'tagline', 'category','rating_user', 'middle_star')
         # fields = '__all__'
 
-class MovieDetailSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(slug_field='name', read_only = True)
-    actors = serializers.SlugRelatedField(slug_field='name', read_only = True, many=True)
-    directors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
-    genres = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
-    reviews = ReviewSerializer(many=True)
-
-
-    class Meta:
-        model = Movie
-        exclude = ("draft",)## выражение exlude означет что мы берем все поля бд крое поля draft
-
 
 class GenreListSerializers(serializers.ModelSerializer):
     class Meta:
@@ -102,5 +90,19 @@ class CreateRatingSerializer(serializers.ModelSerializer):
             defaults={'star': validated_data.get('star')}
         )
         return rating
+
+
+
+class MovieDetailSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(slug_field='name', read_only = True)
+    actors = ActorSerializer( read_only = True, many=True)
+    directors = ActorSerializer(read_only=True, many=True)
+    genres = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
+    reviews = ReviewSerializer(many=True)
+
+
+    class Meta:
+        model = Movie
+        exclude = ("draft",)## выражение exlude означет что мы берем все поля бд крое поля draft
 
 
