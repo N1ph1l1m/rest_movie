@@ -38,7 +38,7 @@ class MovieListSerializers(serializers.ModelSerializer):
     middle_star =  serializers.IntegerField()
     class Meta:
         model = Movie
-        fields = ('title', 'tagline', 'category','rating_user', 'middle_star')
+        fields = ('id','title', 'tagline', 'category','rating_user', 'middle_star')
         # fields = '__all__'
 
 
@@ -70,6 +70,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
+    movie = serializers.SlugRelatedField(slug_field="title", read_only=True)
+
     class Meta:
         model = Rating
         fields = "__all__"
