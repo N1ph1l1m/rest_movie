@@ -3,17 +3,18 @@ from rest_framework import status, generics
 from rest_framework.response import  Response
 from rest_framework.views import APIView
 from .models import *
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import *
-
-from .service import get_client_ip
+from .service import get_client_ip , MovieFilter
 
 # Create your views here.
-
 
 
 #generic
 class MovieListView(generics.ListAPIView):
     serializer_class = MovieListSerializers
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = MovieFilter
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
                         rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(self.request)))
@@ -67,18 +68,24 @@ class ActorDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActorSerializer
 
 
+
+
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryDetailSerializer
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryDetailSerializer
+    lookup_field = 'url'
+
+
+
 
 class RatingDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rating.objects.all()

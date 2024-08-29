@@ -63,11 +63,17 @@ class ActorSerializer(serializers.ModelSerializer):
         model = Actor
         fields = '__all__'
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        exclude = ("url",)
 
 class RatingSerializer(serializers.ModelSerializer):
     movie = serializers.SlugRelatedField(slug_field="title", read_only=True)

@@ -16,7 +16,7 @@ urlpatterns = [
     path("actor/<int:pk>/",views.ActorDetailView.as_view()),
     path("actor-add/",views.ActorCreateView.as_view()),
     path("category/", views.CategoryListView.as_view()),
-    path("category/<int:pk>/", views.CategoryDetailView.as_view()),
+    path("category/<slug:url>/", views.CategoryDetailView.as_view()),
     path("category-add/",views.CategoryCreateView.as_view()),
     path("rating/",views.RatingListView.as_view()),
     path("rating/<int:pk>/",views.RatingDetailView.as_view()),

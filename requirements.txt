@@ -2,6 +2,10 @@ asgiref==3.8.1
 contourpy==1.2.1
 cycler==0.12.1
 Django==5.1
+django-ckeditor==6.7.1
+django-ckeditor-5==0.2.13
+django-filter==24.3
+django-js-asset==2.2.0
 djangorestframework==3.15.2
 fonttools==4.53.1
 kiwisolver==1.4.5
@@ -9,6 +13,9 @@ matplotlib==3.9.2
 numpy==2.1.0
 packaging==24.1
 pillow==10.4.0
+psycopg-binary==3.2.1
+psycopg2==2.9.9
+psycopg2-binary==2.9.9
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 setuptools==72.2.0
