@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status, generics
+from rest_framework import status, generics,permissions
 from rest_framework.response import  Response
 from rest_framework.views import APIView
 from .models import *
@@ -15,6 +15,7 @@ class MovieListView(generics.ListAPIView):
     serializer_class = MovieListSerializers
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
+    permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
                         rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(self.request)))
@@ -31,7 +32,6 @@ class GenreListView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreListSerializers
 
-
 class GenreDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreListSerializers
@@ -39,7 +39,6 @@ class GenreDetailView(generics.RetrieveUpdateDestroyAPIView):
 class GenreCreateView(generics.CreateAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreListSerializers
-
 
 class ReviewListView(generics.ListAPIView):
     queryset = Review.objects.all()
@@ -53,7 +52,6 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewDetailSerializer
 
-
 class ActorListView(generics.ListAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
@@ -62,13 +60,9 @@ class ActorCreateView(generics.CreateAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
 
-
 class ActorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
-
-
-
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -78,14 +72,10 @@ class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryDetailSerializer
 
-
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryDetailSerializer
     lookup_field = 'url'
-
-
-
 
 class RatingDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rating.objects.all()
