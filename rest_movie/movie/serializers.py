@@ -32,14 +32,14 @@ class MovieListSerializers(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(slug_field='name', read_only=True)
     # actors = serializers.SlugRelatedField(slug_field='name',read_only=True,many=True)
     # directors = serializers.SlugRelatedField(slug_field='name',read_only=True,many=True)
-    # genres = serializers.SlugRelatedField(slug_field='name',read_only=True,many=True)
+    genres = serializers.SlugRelatedField(slug_field='name',read_only=True,many=True)
 
     rating_user = serializers.BooleanField()
     middle_star =  serializers.IntegerField()
     class Meta:
         model = Movie
-        fields = ('id','title', 'tagline', 'category','rating_user', 'middle_star')
-        # fields = '__all__'
+        fields = ('id','title', 'tagline', 'category', 'genres','rating_user', 'middle_star', 'year')
+        #fields = '__all__'
 
 
 class GenreListSerializers(serializers.ModelSerializer):

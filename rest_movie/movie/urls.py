@@ -2,23 +2,22 @@ import django
 from django.urls import path
 from . import views
 from django.urls import include
+from rest_framework import routers
+
+
+router = routers.DefaultRouter()
+router.register(r'movie', views.MovieViewSet, basename='movie')
+router.register(r'genre',views.GenreViewSet,basename='genre')
+router.register(r'review',views.ReviewViewSet,basename='review')
+router.register(r'actor',views.ActorViewSet,basename='actor')
+router.register(r'category',views.CategoryViewSet,basename='category')
+router.register(r'rating',views.RatingViewSet,basename='rating')
+
+
+rout = routers.SimpleRouter()
+rout.register(r'review',views.GenreViewSet,basename="rev")
 
 urlpatterns = [
-    path("", views.MovieListView.as_view()),
-    path("<int:pk>/",views.MovieDetailView.as_view()),
-    path("genre/", views.GenreListView.as_view()),
-    path("genre-add/", views.GenreCreateView.as_view()),
-    path("genre/<int:pk>/", views.GenreDetailView.as_view()),
-    path("review/",views.ReviewListView.as_view()),
-    path("review-add/",views.ReviewCreateView.as_view()),
-    path("review/<int:pk>/",views.ReviewDetailView.as_view()),
-    path("actor/",views.ActorListView.as_view()),
-    path("actor/<int:pk>/",views.ActorDetailView.as_view()),
-    path("actor-add/",views.ActorCreateView.as_view()),
-    path("category/", views.CategoryListView.as_view()),
-    path("category/<slug:url>/", views.CategoryDetailView.as_view()),
-    path("category-add/",views.CategoryCreateView.as_view()),
-    path("rating/",views.RatingListView.as_view()),
-    path("rating/<int:pk>/",views.RatingDetailView.as_view()),
+    path('', include(router.urls)),
     path("rating-add/",views.AddStarRatingView.as_view()),
 ]
