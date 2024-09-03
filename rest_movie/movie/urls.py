@@ -5,7 +5,7 @@ from django.urls import include
 from rest_framework import routers
 
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 router.register(r'movie', views.MovieViewSet, basename='movie')
 router.register(r'genre',views.GenreViewSet,basename='genre')
 router.register(r'review',views.ReviewViewSet,basename='review')

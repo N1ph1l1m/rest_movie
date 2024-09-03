@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework import status, generics,permissions, viewsets
 from rest_framework.decorators import action
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import  Response
 from rest_framework.views import APIView
 from .models import *
@@ -12,11 +14,17 @@ from .service import get_client_ip , MovieFilter
 
 #viewSet
 
+
+
+
 class MovieViewSet(viewsets.ModelViewSet):
     qyeryset = Movie.objects.all()
     serializer_class = MovieListSerializers
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
+    permission_classes = [permissions.IsAuthenticated]
+
+
 
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
@@ -25,6 +33,8 @@ class MovieViewSet(viewsets.ModelViewSet):
                     middle_star = models.Sum(models.F('ratings__star'))/ models.Count(models.F('ratings'))
                 )
         return movies
+
+
 
     @action(methods=['get'],detail=False)
     def actor35(self,request):
@@ -36,10 +46,19 @@ class MovieViewSet(viewsets.ModelViewSet):
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreListSerializers
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+
+#класс пагинации
+class ReviewAPIListPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewCreateSerializer
+    pagination_class = ReviewAPIListPagination
 
 class ActorViewSet(viewsets.ModelViewSet):
     queryset = Actor.objects.all()
