@@ -46,8 +46,8 @@ class MovieViewSet(viewsets.ModelViewSet):
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreListSerializers
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = (TokenAuthentication,)
+    #permission_classes = [permissions.IsAuthenticated]
+  #  authentication_classes = (TokenAuthentication,)
 
 #класс пагинации
 class ReviewAPIListPagination(PageNumberPagination):

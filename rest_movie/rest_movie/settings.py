@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'djoser',
     'django_filters',
+    'corsheaders'
 
 ]
 
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'rest_movie.urls'
@@ -207,19 +210,29 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
+    # 'DEFAULT_PERMISSION_CLASSES':[
+    #   'rest_framework.permissions.AllowAny'
+    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+         # 'rest_framework.authentication.BasicAuthentication',
+         # 'rest_framework.authentication.SessionAuthentication',
         #'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
+
+# LOGIN_REDIRECT_URL = '/log/'
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+
 #smtp
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
