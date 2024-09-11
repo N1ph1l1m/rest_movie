@@ -20,4 +20,5 @@ rout.register(r'review',views.GenreViewSet,basename="rev")
 urlpatterns = [
     path('', include(router.urls)),
     path("rating-add/",views.AddStarRatingView.as_view()),
+    path("users/",views.UserList.as_view()),
 ]

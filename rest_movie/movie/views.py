@@ -72,6 +72,12 @@ class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UsersListSerializer
+
+
+
 class AddStarRatingView(APIView):
     def post(self,request):
         serializer = CreateRatingSerializer(data=request.data)

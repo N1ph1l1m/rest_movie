@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from .service import get_client_ip
+from django.contrib.auth.models import User
 
 class FilterReviewSerializer(serializers.ListSerializer):
     def to_representation(self, data):
@@ -46,6 +47,12 @@ class GenreListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = '__all__'
+
+
+class UsersListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id","username",)
 
 
 class ReviewDetailSerializer(serializers.ModelSerializer):
