@@ -76,6 +76,9 @@ class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UsersListSerializer
 
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UsersListSerializer
 
 
 class AddStarRatingView(APIView):
